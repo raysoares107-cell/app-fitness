@@ -3,81 +3,120 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FitLife</title>
+<title>FitLife - Seu Treino</title>
 <style>
-body{font-family:Arial;background:#111;color:#fff;margin:0;padding:15px;padding-bottom:80px}
-h1{text-align:center;color:#00ff88}
-.card{background:#222;padding:15px;border-radius:12px;margin:15px 0}
-button{background:#00ff88;color:#000;padding:12px;width:100%;border:none;border-radius:8px;font-weight:bold;font-size:16px;margin-top:10px}
-input,select{width:95%;padding:12px;border-radius:8px;border:none;margin:5px 0;background:#333;color:#fff}
-img{width:100%;border-radius:10px;margin-top:10px}
-.exercicio{background:#2a2a2a;padding:12px;border-radius:10px;margin:10px 0;border-left:4px solid #00ff88}
-iframe{width:100%;height:200px;border-radius:10px;border:none;margin-top:10px}
-#modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);overflow-y:auto;padding:15px;z-index:99}
+body{font-family:Arial;background:#0f0f0f;color:#fff;margin:0;padding:0}
+.tela{padding:20px;display:none;min-height:100vh}
+.tela.ativa{display:block}
+h1{color:#00ff88;text-align:center}
+.card{background:#1e1e1e;padding:18px;border-radius:14px;margin:15px 0;border:1px solid #333}
+button{background:#00ff88;color:#000;padding:14px;width:100%;border:none;border-radius:10px;font-weight:bold;font-size:17px;margin-top:10px}
+button.sec{background:#333;color:#fff}
+input,select{width:100%;padding:14px;border-radius:10px;border:none;margin:8px 0;background:#2a2a2a;color:#fff;box-sizing:border-box;font-size:16px}
+.progress{height:6px;background:#333;border-radius:10px;overflow:hidden;margin:15px 0}
+.progress div{height:100%;background:#00ff88;width:0%;transition:0.3s}
+.exercicio{background:#252525;padding:14px;border-radius:12px;margin:12px 0;border-left:4px solid #00ff88}
+img{width:100%;border-radius:10px;margin-top:8px}
+iframe{width:100%;height:210px;border-radius:10px;border:none;margin-top:10px}
+.tag{display:inline-block;background:#00ff88;color:#000;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:bold;margin-right:5px}
 </style>
 </head>
 <body>
+
+<!-- TELA 1 - QUIZ -->
+<div id="tela1" class="tela ativa">
 <h1>💪 FitLife</h1>
-
+<div class="progress"><div id="bar" style="width:25%"></div></div>
 <div class="card">
-<h2>🔥 Treino de Hoje (Today's Workout)</h2>
-<select id="diaTreino" onchange="mudarTreino()">
-<option value="segunda">Segunda: Peito + Tríceps</option>
-<option value="terca">Terça: Costas + Bíceps (Braço)</option>
-<option value="quarta">Quarta: Pernas</option>
-<option value="quinta">Quinta: Ombro + Abdômen</option>
+<h2>Vamos te conhecer! (Let's know you)</h2>
+<label>Seu nome:</label>
+<input id="nome" placeholder="Ex: Ray">
+<label>Seu objetivo principal (Main Goal):</label>
+<select id="objetivo">
+<option value="emagrecer">🔥 Emagrecimento / Perder gordura (Weight Loss)</option>
+<option value="massa">💪 Ganhar massa muscular (Muscle Gain)</option>
+<option value="definir">⚡ Definir e condicionamento (Fitness)</option>
 </select>
-<div id="previewTreino"></div>
-<button onclick="abrirTreino()">Começar Treino (Start) ▶️</button>
+<label>Você já treina?</label>
+<select id="nivel">
+<option value="iniciante">Nunca treinei - Iniciante (Beginner)</option>
+<option value="ja_treinei">Já treinei, mas parei</option>
+<option value="intermediario">Treino atualmente - Intermediário</option>
+</select>
+<label>Onde vai treinar? (Where?)</label>
+<select id="local">
+<option value="casa">🏠 Em Casa (Home - Sem aparelhos)</option>
+<option value="academia">🏋️ Na Academia (Gym)</option>
+</select>
+<button onclick="irTela2()">Continuar (Next) →</button>
+</div>
 </div>
 
-<div id="modal">
-<div class="card" style="margin-top:30px">
-<h2 id="modalTitulo"></h2>
-<div id="modalConteudo"></div>
-<button onclick="document.getElementById('modal').style.display='none'" style="background:#ff4444;color:#fff">Fechar (Close) X</button>
-</div>
-</div>
-
+<!-- TELA 2 - DADOS -->
+<div id="tela2" class="tela">
+<h1>📊 Seus Dados</h1>
+<div class="progress"><div style="width:60%"></div></div>
 <div class="card">
-<h2>Calculadora IMC (BMI)</h2>
-<input id="peso" type="number" placeholder="Peso kg">
-<input id="altura" type="number" placeholder="Altura ex: 1.75">
-<button onclick="let p=peso.value,a=altura.value;resultado.innerText='Seu IMC: '+(p/(a*a)).toFixed(1)">Calcular (Calculate)</button>
-<p id="resultado"></p>
+<label>Peso (Weight) kg:</label><input id="peso" type="number" placeholder="Ex: 80">
+<label>Altura (Height) m:</label><input id="altura" type="number" placeholder="Ex: 1.75">
+<label>Idade (Age):</label><input id="idade" type="number" placeholder="Ex: 25">
+<button onclick="gerarPlano()">Gerar Meu Plano Personalizado (Create Plan) 🔥</button>
+<button class="sec" onclick="voltar(1)">← Voltar (Back)</button>
+</div>
+</div>
+
+<!-- TELA 3 - APP FINAL -->
+<div id="tela3" class="tela">
+<h1 id="tituloPlano">Seu Plano</h1>
+<div id="conteudoPlano"></div>
 </div>
 
 <script>
-const treinos = {
-segunda: [
- {nome:"Supino Reto (Bench Press)", img:"https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600", video:"https://www.youtube.com/embed/rT7DgCr-3pg", dica:"Iniciante: Deite, pés no chão, desça a barra até o peito devagar e empurre. 3x12. Cotovelo 45 graus."},
- {nome:"Flexão (Push-up)", img:"https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=600", video:"https://www.youtube.com/embed/IODxDxX7oi4", dica:"Mãos na largura do ombro, corpo reto. Desça até 90 graus. Se for difícil, apoie os joelhos."}
-],
-terca: [
- {nome:"Rosca Direta - Braço (Bicep Curl)", img:"https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=600", video:"https://www.youtube.com/embed/ykJmrZ5v0Oo", dica:"Iniciante: Em pé, cotovelos colados no corpo. Sobe o peso sem balançar. 3x12 com halter leve. Foco no bíceps!"},
- {nome:"Barra Fixa (Pull-up) ou Puxada", img:"https://images.unsplash.com/photo-1605296867304-46d5465a13f1?w=600", video:"https://www.youtube.com/embed/eGo4IYlbE5g", dica:"Se não faz barra, usa a máquina puxada na frente. Puxe até o queixo, desça devagar."}
-],
-quarta: [{nome:"Agachamento (Squat)", img:"https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=600", video:"https://www.youtube.com/embed/aclHkVaku9U", dica:"Pés na largura do ombro, bunda pra trás como se fosse sentar. Joelho não passa da ponta do pé."}],
-quinta: [{nome:"Desenvolvimento Ombro", img:"https://images.unsplash.com/photo-1532029837206-abbe2b7620e3?w=600", video:"https://www.youtube.com/embed/qEwKCR5JCog", dica:"Sentado, empurra o halter pra cima sem arquear as costas. 3x12."}]
-};
+let dados={};
+function irTela2(){
+ if(!nome.value){alert('Coloca seu nome');return;}
+ dados.nome=nome.value; dados.objetivo=objetivo.value; dados.nivel=nivel.value; dados.local=local.value;
+ document.getElementById('tela1').classList.remove('ativa');
+ document.getElementById('tela2').classList.add('ativa');
+}
+function voltar(n){document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa'));document.getElementById('tela'+n).classList.add('ativa');}
+function gerarPlano(){
+ dados.peso=peso.value; dados.altura=altura.value; dados.idade=idade.value;
+ let imc=(dados.peso/(dados.altura*dados.altura)).toFixed(1);
+ localStorage.setItem('fitlife',JSON.stringify(dados));
+ let planoHTML='';
+ let localTxt = dados.local=='casa' ? 'EM CASA (HOME)' : 'NA ACADEMIA (GYM)';
 
-function mudarTreino(){
- let dia = document.getElementById('diaTreino').value;
- let lista = treinos[dia];
- document.getElementById('previewTreino').innerHTML = `<p>Hoje tem ${lista.length} exercícios - Hoje (Today) ${lista[0].nome} e mais...</p>`;
+ if(dados.objetivo=='emagrecer'){
+   planoHTML+=`<div class="card"><h2>Olá ${dados.nome}! 🔥</h2><p>Seu foco: <span class="tag">${localTxt}</span> <span class="tag">EMAGRECIMENTO</span></p><p>Seu IMC: ${imc} | Plano de 4 semanas para perder gordura</p><p><b>Estratégia:</b> Full Body + Cardio todo dia. 40min por dia.</p></div>`;
+   if(dados.local=='casa'){
+     planoHTML+=`
+     <div class="card"><h2>📅 Segunda / Quarta / Sexta - Queima Gordura</h2>
+     <div class="exercicio"><h3>1. Polichinelo (Jumping Jack) - 3x45seg</h3><img src="https://images.unsplash.com/photo-1599058917212-d750089bc07e?w=600"><p><b>Como fazer:</b> Iniciante, braço e perna abre e fecha. Sem parar. Descanso 30s.</p><iframe src="https://www.youtube.com/embed/c4DAnQ6DtF8" allowfullscreen></iframe></div>
+     <div class="exercicio"><h3>2. Agachamento sem peso (Bodyweight Squat) - 4x15</h3><img src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=600"><p><b>Como fazer:</b> Bunda pra trás, como se fosse sentar na cadeira. Ótimo pra perna e queimar caloria.</p><iframe src="https://www.youtube.com/embed/aclHkVaku9U" allowfullscreen></iframe></div>
+     <div class="exercicio"><h3>3. Flexão de braço no joelho (Knee Push-up) - 3x12</h3><img src="https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=600"><p><b>Como fazer:</b> Se não consegue normal, apoia o joelho. Peito encosta no chão.</p><iframe src="https://www.youtube.com/embed/IODxDxX7oi4" allowfullscreen></iframe></div>
+     </div>`;
+   } else {
+     planoHTML+=`
+     <div class="card"><h2>📅 Academia - Emagrecimento</h2>
+     <div class="exercicio"><h3>1. Esteira (Treadmill) - 20min</h3><img src="https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=600"><p><b>Como fazer:</b> Começa caminhada rápida 6km/h, depois 2min correndo leve.</p><iframe src="https://www.youtube.com/embed/f4WLrg6a7A4" allowfullscreen></iframe></div>
+     <div class="exercicio"><h3>2. Supino Máquina + Remada - 3x15 leve</h3><img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=600"><p><b>Foco:</b> Pouca carga, muitas repetições pra queimar. Intervalo 30s só.</p><iframe src="https://www.youtube.com/embed/rT7DgCr-3pg" allowfullscreen></iframe></div>
+     </div>`;
+   }
+ } else {
+   planoHTML+=`<div class="card"><h2>Olá ${dados.nome}! 💪 Plano Massa Muscular</h2></div>`;
+ }
+
+ planoHTML+=`<div class="card"><button onclick="localStorage.clear();voltar(1)" class="sec">Refazer Questionário (Restart)</button></div>`;
+ document.getElementById('conteudoPlano').innerHTML=planoHTML;
+ document.getElementById('tela2').classList.remove('ativa');
+ document.getElementById('tela3').classList.add('ativa');
+ document.getElementById('tituloPlano').innerText=`Plano ${dados.nome} - ${localTxt}`;
+ window.scrollTo(0,0);
 }
-function abrirTreino(){
- let dia = document.getElementById('diaTreino').value;
- let lista = treinos[dia];
- let html = "";
- lista.forEach(ex => {
-   html += `<div class="exercicio"><h3>${ex.nome}</h3><img src="${ex.img}"><p>👉 <b>Como fazer (Beginner):</b> ${ex.dica}</p><iframe src="${ex.video}" allowfullscreen></iframe></div>`;
- });
- document.getElementById('modalTitulo').innerText = document.getElementById('diaTreino').options[document.getElementById('diaTreino').selectedIndex].text;
- document.getElementById('modalConteudo').innerHTML = html;
- document.getElementById('modal').style.display='block';
-}
-mudarTreino();
+// se já fez, pula direto
+let salvo=JSON.parse(localStorage.getItem('fitlife')||'null');
+if(salvo && salvo.nome){ dados=salvo; peso.value=salvo.peso; altura.value=salvo.altura; gerarPlano(); }
 </script>
 </body>
 </html>
